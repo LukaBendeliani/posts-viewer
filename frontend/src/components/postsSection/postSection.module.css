@@ -1,0 +1,5 @@
+.container {
+  width: calc(100vw - var(--cardWidth) - var(--scrollbarWidth) - 48px);
+  height: 100vh;
+  background-color: aqua;
+}

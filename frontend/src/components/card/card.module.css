@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eaeaea;
+  width: var(--cardWidth);
+  height: 120px;
+  padding: 24px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.container:hover {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid transparent;
+}
+
+.container h3 {
+  margin: 0;
+  font-size: 18px;
+  max-height: 40px;
+}
+
+.container p {
+  font-size: 14px;
+  max-height: 50px;
+  overflow: hidden;
+}

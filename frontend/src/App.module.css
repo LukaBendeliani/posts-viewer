@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+}
+
+.postList {
+  width: calc(var(--cardWidth) + var(--scrollbarWidth) + 48px);
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: 24px;
+}
