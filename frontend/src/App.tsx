@@ -1,47 +1,57 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, FC, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import Card from "./components/card/card";
+import PostCard from "./components/postCard/postCard";
 import PostSection from "./components/postsSection/postSection";
 
 import styles from "./App.module.css";
-export interface Post {
-  name: string;
-  title: string;
-  content: string;
-  comments: object[];
-  callback: React.MouseEventHandler;
-}
+import { Post } from "./interfaces";
+import { PostsState } from "./redux/reducer";
+import { updatePostsState } from "./redux/actions";
 
 const App = () => {
-  const [posts, setPosts] = useState([]);
-  const [activePost, setActivePost] = useState({});
+  const [activePost, setActivePost] = useState<Post | null>(null);
+  const postsArray = useSelector<PostsState, PostsState["posts"]>(
+    (state) => state.posts
+  );
+
+  const dispatch = useDispatch();
+
+  const updatePosts = useCallback(
+    (posts: PostsState) => {
+      dispatch(updatePostsState(posts));
+    },
+    [dispatch]
+  );
+
+  const getData = useCallback(async () => {
+    const response = await fetch("http://localhost:3001/posts");
+    const json = await response.json();
+    updatePosts(json);
+  }, [updatePosts]);
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
 
-  const getData = async () => {
-    const response = await fetch("http://localhost:3001/posts");
-    const json = await response.json();
-    setPosts(json);
-  };
+  useEffect(() => {
+    setActivePost(activePost ? postsArray[activePost.postId] : null);
+  }, [postsArray, activePost]);
 
-  const postsMapper: React.FC<Post> = (
-    { name, title, content, comments },
-    index
-  ) => {
-    const cardProps = {
-      title,
-      content,
-      callback: () => setActivePost({ name, title, content, comments }),
-    };
-    return <Card key={index} {...cardProps} />;
+  const postsMapper: FC<Post> = (post: Post, index) => {
+    const callback = () => setActivePost({ ...post });
+    const cardProps = { ...post, callback };
+    return <PostCard key={index} {...cardProps} />;
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.postList}>{posts.map(postsMapper)}</div>
-      <PostSection></PostSection>
+      {postsArray.length ? (
+        <div className={styles.postList}>{postsArray.map(postsMapper)}</div>
+      ) : (
+        <h1>Loading...</h1>
+      )}
+      {activePost && <PostSection {...activePost} />}
     </div>
   );
 };

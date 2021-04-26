@@ -3,7 +3,7 @@
   flex-direction: column;
   border: 1px solid #eaeaea;
   width: var(--cardWidth);
-  height: 120px;
+  height: 160px;
   padding: 24px;
   transition: all 0.2s;
   cursor: pointer;
@@ -18,10 +18,29 @@
   margin: 0;
   font-size: 18px;
   max-height: 40px;
+  text-transform: capitalize;
 }
 
 .container p {
   font-size: 14px;
   max-height: 50px;
   overflow: hidden;
+}
+
+.container h6 {
+  margin: 0;
+  font-size: 16px;
+  max-height: 40px;
+}
+
+.container img {
+  width: 50px;
+  height: 50px;
+}
+.container div {
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid #f1f1f1;
+  margin: 2px 0;
+  padding: 2px 0;
 }

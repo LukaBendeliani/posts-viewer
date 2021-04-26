@@ -32,9 +32,10 @@ for (let i = 0; i < 20; i++) {
     content:
       "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system,",
     comments: [],
+    profile: "http://localhost:3001/profile.png",
   };
 
   posts.push(post);
 }
 
-fs.writeFileSync("./post.json", JSON.stringify(posts));
+fs.writeFileSync("./posts.json", JSON.stringify(posts));
