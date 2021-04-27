@@ -1,0 +1,14 @@
+.personContainer {
+  display: flex;
+}
+.personContainer img {
+  width: 50px;
+  height: 50px;
+}
+
+.personContainer h6 {
+  margin: 1em 0.5em;
+  font-size: 15px;
+  max-height: 40px;
+  color: #264653;
+}

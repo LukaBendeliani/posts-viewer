@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import PostCard from "./components/postCard/postCard";
 import PostSection from "./components/postsSection/postSection";
+import PostList from "./components/postList/postList";
 
 import styles from "./App.module.css";
 import { Post } from "./interfaces";
@@ -47,7 +48,9 @@ const App = () => {
   return (
     <div className={styles.container}>
       {postsArray.length ? (
-        <div className={styles.postList}>{postsArray.map(postsMapper)}</div>
+        <PostList className={styles.postList}>
+          {postsArray.map(postsMapper)}
+        </PostList>
       ) : (
         <h1>Loading...</h1>
       )}

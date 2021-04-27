@@ -1,17 +1,14 @@
 .container {
-  width: calc(100vw - var(--cardWidth) - var(--scrollbarWidth) - 48px);
-  height: 100vh;
-  overflow-y: scroll;
-}
-
-.postContainer {
-  border: 1px solid #cecece;
-  margin: 1vw;
+  width: calc(100vw - var(--cardWidth) - var(--scrollbarWidth) - 48px - 6vw);
   padding: 2vw;
+  margin: 1vw;
+  height: calc(100vh - 7vw);
+  overflow-y: scroll;
+  border: 1px solid #cecece;
   border-radius: 4px 4px 0 0;
 }
 
-.postContainer img {
+.container img {
   width: 50px;
   height: 50px;
 }
@@ -25,16 +22,16 @@
   margin: 0;
   text-transform: capitalize;
 }
-.postContainer input[type="text"] {
+.container input[type="text"] {
   width: calc(100% - 30px);
   height: 20px;
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0;
   border: 1px solid #dedede;
   font-size: 16px;
   padding: 15px;
 }
 
-.postContainer input[type="text"]:focus {
+.container input[type="text"]:focus {
   outline: none;
 }
 

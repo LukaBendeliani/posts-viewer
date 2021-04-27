@@ -5,6 +5,7 @@ import styles from "./postSection.module.css";
 import { Post, Comment } from "../../interfaces";
 import { updatePostsState } from "../../redux/actions";
 import { PostsState } from "../../redux/reducer";
+import Person from "../person/person";
 
 const PostSection: FC<Post> = ({
   title,
@@ -27,10 +28,7 @@ const PostSection: FC<Post> = ({
   ) => {
     return (
       <div key={index} className={styles.comment}>
-        <div className={styles.profile}>
-          <img src={profile} alt="profile" />
-          <h3>{name}</h3>
-        </div>
+        <Person name={name} image={profile} />
         {content}
       </div>
     );
@@ -39,6 +37,7 @@ const PostSection: FC<Post> = ({
   const postComment = ({ key }: KeyboardEvent) => {
     if (key === "Enter" && commentValue) {
       const name = localStorage.getItem("name");
+
       if (!name) {
         const name = prompt("Enter your name");
         localStorage.setItem("name", name ? name : "guest");
@@ -56,6 +55,7 @@ const PostSection: FC<Post> = ({
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       };
+
       fetch("http://localhost:3001/comments", options)
         .then((res) => res.json())
         .then((json) => updatePosts(json));
@@ -64,23 +64,18 @@ const PostSection: FC<Post> = ({
 
   return (
     <div className={styles.container}>
-      <div className={styles.postContainer}>
-        <div className={styles.profile}>
-          <img src={profile} alt="profile" />
-          <h3>{name}</h3>
-        </div>
-        <h3>{title}</h3>
-        <p>{content}</p>
-        <input
-          type="text"
-          name="comment"
-          placeholder="Write a Comment..."
-          onKeyPress={postComment}
-          onChange={({ target: { value } }) => setCommentValue(value)}
-          value={commentValue}
-        />
-        {comments.map(commentsMapper)}
-      </div>
+      <Person name={name} image={profile} />
+      <h3>{title}</h3>
+      <p>{content}</p>
+      <input
+        type="text"
+        name="comment"
+        placeholder="Write a Comment..."
+        onKeyPress={postComment}
+        onChange={({ target: { value } }) => setCommentValue(value)}
+        value={commentValue}
+      />
+      {comments.map(commentsMapper)}
     </div>
   );
 };
