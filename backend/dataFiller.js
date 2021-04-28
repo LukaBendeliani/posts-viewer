@@ -26,7 +26,7 @@ const names = [
 
 for (let i = 0; i < 20; i++) {
   const post = {
-    userId: i,
+    postId: i,
     name: names[i],
     title: `post${i}`,
     content:
