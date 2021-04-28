@@ -5,7 +5,8 @@
   height: calc(100vh - 7vw);
   overflow-y: scroll;
   border: 1px solid #cecece;
-  border-radius: 4px 4px 0 0;
+  border-radius: 4px;
+  box-shadow: 0 4px 30px rgb(0 0 0 / 10%);
 }
 
 .container img {
@@ -22,20 +23,7 @@
   margin: 0;
   text-transform: capitalize;
 }
-.container input[type="text"] {
-  width: calc(100% - 30px);
-  height: 20px;
-  border-radius: 12px 12px 0 0;
-  border: 1px solid #dedede;
-  font-size: 16px;
-  padding: 15px;
-}
 
 .container input[type="text"]:focus {
   outline: none;
-}
-
-.comment {
-  padding: 1em;
-  border: 1px solid #cecece;
 }

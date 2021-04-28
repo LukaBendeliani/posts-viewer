@@ -1,43 +1,19 @@
-import { useState, useEffect, FC, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect, FC } from "react";
 
 import PostCard from "./components/postCard/postCard";
 import PostSection from "./components/postsSection/postSection";
 import PostList from "./components/postList/postList";
+import getData from "./utils/getData";
 
-import styles from "./App.module.css";
 import { Post } from "./interfaces";
-import { PostsState } from "./redux/reducer";
-import { updatePostsState } from "./redux/actions";
 
 const App = () => {
   const [activePost, setActivePost] = useState<Post | null>(null);
-  const postsArray = useSelector<PostsState, PostsState["posts"]>(
-    (state) => state.posts
-  );
-
-  const dispatch = useDispatch();
-
-  const updatePosts = useCallback(
-    (posts: PostsState) => {
-      dispatch(updatePostsState(posts));
-    },
-    [dispatch]
-  );
-
-  const getData = useCallback(async () => {
-    const response = await fetch("http://localhost:3001/posts");
-    const json = await response.json();
-    updatePosts(json);
-  }, [updatePosts]);
+  const [posts, setPosts] = useState<Array<Post>>([]);
 
   useEffect(() => {
-    getData();
-  }, [getData]);
-
-  useEffect(() => {
-    setActivePost(activePost ? postsArray[activePost.postId] : null);
-  }, [postsArray, activePost]);
+    getData(setPosts, "http://localhost:3001/posts");
+  }, []);
 
   const postsMapper: FC<Post> = (post: Post, index) => {
     const callback = () => setActivePost({ ...post });
@@ -46,15 +22,15 @@ const App = () => {
   };
 
   return (
-    <div className={styles.container}>
-      {postsArray.length ? (
-        <PostList className={styles.postList}>
-          {postsArray.map(postsMapper)}
-        </PostList>
+    <div style={{ display: "flex" }}>
+      {posts.length ? (
+        <PostList>{posts.map(postsMapper)}</PostList>
       ) : (
         <h1>Loading...</h1>
       )}
-      {activePost && <PostSection {...activePost} />}
+      {activePost && (
+        <PostSection {...activePost} posts={posts} setPosts={setPosts} />
+      )}
     </div>
   );
 };

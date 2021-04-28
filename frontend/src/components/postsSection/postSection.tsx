@@ -1,11 +1,13 @@
-import { KeyboardEvent, FC, useState } from "react";
-import { useDispatch } from "react-redux";
+import { KeyboardEvent, FC, useState, useEffect } from "react";
 
 import styles from "./postSection.module.css";
 import { Post, Comment } from "../../interfaces";
-import { updatePostsState } from "../../redux/actions";
-import { PostsState } from "../../redux/reducer";
+
 import Person from "../person/person";
+import updatePostsArray from "../../utils/updatePostsArray";
+
+import CommentInput from "../commentInput/commentInput";
+import CommentComponent from "../comment/comment";
 
 const PostSection: FC<Post> = ({
   title,
@@ -14,52 +16,74 @@ const PostSection: FC<Post> = ({
   name,
   comments,
   postId,
+  posts,
+  setPosts,
 }) => {
   const [commentValue, setCommentValue] = useState("");
-  const dispatch = useDispatch();
+  const [replyValue, setReplyValue] = useState("");
+  const [visibleReply, setVisibleReply] = useState<number | null>(null);
 
-  const updatePosts = (posts: PostsState) => {
-    dispatch(updatePostsState(posts));
+  const toggleVisibility = () => {
+    return (index: number) =>
+      setVisibleReply(index === visibleReply ? null : index);
+  };
+
+  useEffect(() => {
+    setReplyValue("");
+    setCommentValue("");
+  }, [postId]);
+
+  const postComment = ({
+    key,
+    currentTarget: { name, value },
+  }: KeyboardEvent<HTMLInputElement>) => {
+    if (key === "Enter" && value) {
+      const user =
+        localStorage.getItem("name") || prompt("Enter your name") || "guest";
+      localStorage.setItem("name", user);
+
+      const comment = {
+        content: value,
+        profile,
+        postId,
+        name: user,
+        replys: [],
+      };
+
+      updatePostsArray(
+        name,
+        posts,
+        postId,
+        comment,
+        visibleReply,
+        setPosts
+      ).then(() =>
+        name === "COMMENT" ? setCommentValue("") : setReplyValue("")
+      );
+    }
+  };
+
+  const handleChange = (val: string) => {
+    setCommentValue(val);
   };
 
   const commentsMapper = (
-    { content, name, profile }: Comment,
+    { content, name, profile, replys }: Comment,
     index: number
   ) => {
-    return (
-      <div key={index} className={styles.comment}>
-        <Person name={name} image={profile} />
-        {content}
-      </div>
-    );
-  };
-
-  const postComment = ({ key }: KeyboardEvent) => {
-    if (key === "Enter" && commentValue) {
-      const name = localStorage.getItem("name");
-
-      if (!name) {
-        const name = prompt("Enter your name");
-        localStorage.setItem("name", name ? name : "guest");
-      }
-
-      const data = {
-        content: commentValue,
-        profile,
-        postId,
-        name: name,
-      };
-
-      const options = {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
-      };
-
-      fetch("http://localhost:3001/comments", options)
-        .then((res) => res.json())
-        .then((json) => updatePosts(json));
-    }
+    const commentComponentProps = {
+      content,
+      name,
+      profile,
+      index,
+      visibleReply,
+      replyValue,
+      toggleVisibility,
+      postComment,
+      setReplyValue,
+      replys,
+    };
+    return <CommentComponent key={index} {...commentComponentProps} />;
   };
 
   return (
@@ -67,13 +91,13 @@ const PostSection: FC<Post> = ({
       <Person name={name} image={profile} />
       <h3>{title}</h3>
       <p>{content}</p>
-      <input
-        type="text"
-        name="comment"
-        placeholder="Write a Comment..."
-        onKeyPress={postComment}
-        onChange={({ target: { value } }) => setCommentValue(value)}
+      <CommentInput
+        name="COMMENT"
+        keyPressCallback={(e) => postComment(e)}
+        onChangeCallback={({ target: { value } }) => handleChange(value)}
+        changeHandler={handleChange}
         value={commentValue}
+        placeHolder="Write comment..."
       />
       {comments.map(commentsMapper)}
     </div>

@@ -1,0 +1,22 @@
+.input {
+  width: calc(100% - 30px);
+  height: 20px;
+  border-radius: 12px;
+  border: 1px solid #dedede;
+  font-size: 16px;
+  padding: 15px;
+  background-color: transparent;
+  z-index: 1;
+}
+
+.complete {
+  width: calc(100% - 30px);
+  border: 1px solid transparent;
+  height: 20px;
+  border-radius: 12px;
+  position: absolute;
+  padding: 15px;
+  font-size: 16px;
+  opacity: 0.5;
+  z-index: -1;
+}

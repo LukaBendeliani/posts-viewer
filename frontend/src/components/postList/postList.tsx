@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import styles from "./postList.module.css";
+
 interface Props {
   children?: ReactNode;
   className?: string;
