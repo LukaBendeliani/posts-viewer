@@ -4,7 +4,7 @@ import styles from "./comment.module.css";
 import Person from "../person/person";
 import CommentInput from "../commentInput/commentInput";
 import { Comment } from "../../interfaces";
-
+import formatText from "../../utils/formatText";
 interface Props extends Comment {
   index: number;
   visibleReply: number | null;
@@ -36,7 +36,7 @@ const CommentComponent = (params: Props) => {
     return (
       <div className={styles.reply} key={index}>
         <Person name={name} image={profile} />
-        <p>{content}</p>
+        {formatText(content)}
       </div>
     );
   };
@@ -52,7 +52,7 @@ const CommentComponent = (params: Props) => {
           Reply
         </div>
       </div>
-      <p>{content}</p>
+      {formatText(content)}
       {visibleReply === index && (
         <CommentInput
           name="REPLY"
