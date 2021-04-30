@@ -49,7 +49,7 @@ const CommentInput: FC<Props> = ({
     const suggestedText = names.find((name) => {
       return name.startsWith(currentCommand);
     });
-    console.log(suggestedText);
+
     const complete = suggestedText
       ? val + suggestedText.replace(currentCommand, "")
       : val;
